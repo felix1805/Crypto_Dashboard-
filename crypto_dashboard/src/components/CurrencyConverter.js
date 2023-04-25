@@ -7,25 +7,39 @@ const CurrencyConverter = () => {
   const [chosenPrimaryCurrency, setChosenPrimaryCurrency] = useState('BTC');
   const [chosenSecondaryCurrency, setChosenSecondaryCurrency] = useState('BTC');
   const [amount, setAmount] = useState(1);
+  const [exchangedData, setExchangedData] = useState({
+    primaryCurrency: 'BTC',
+    secondaryCurrency: 'BTC',
+    exchangeRate: 0
+  });
+
+  const [result, setResult] = useState(0);
+
   const convert = () => {
 
     const options = {
       method: 'GET',
       url: 'https://alpha-vantage.p.rapidapi.com/query',
       params: {
-        from_currency: 'BTC',
+        from_currency: chosenPrimaryCurrency,
         function: 'CURRENCY_EXCHANGE_RATE',
-        to_currency: 'USD'
+        to_currency: chosenSecondaryCurrency
       },
       headers: {
         'content-type': 'application/octet-stream',
-        'X-RapidAPI-Key': 'de3b4c09c3msh79a8900c4ecd7d3p1416c9jsn5170c5da93d7',
+        'X-RapidAPI-Key': process.env.REACT_APP_RAPID_API_KEY,
         'X-RapidAPI-Host': 'alpha-vantage.p.rapidapi.com'
       }
     };
 
       axios.request(options).then((response) => {
-        console.log(response.data);
+        console.log(response.data['Realtime Currency Exchange Rate']['5. Exchange Rate']);
+        setResult(response.data['Realtime Currency Exchange Rate']['5. Exchange Rate'] * amount);
+        setExchangedData({
+          primaryCurrency: chosenPrimaryCurrency,
+          secondaryCurrency: chosenSecondaryCurrency,
+          exchangeRate: response.data['Realtime Currency Exchange Rate']['5. Exchange Rate']
+        })
       }).catch((error) => {
       console.error(error);
     })
@@ -58,7 +72,11 @@ const CurrencyConverter = () => {
             <tr>
               <td>Secondary Currency:</td>
               <td>
-                <input type="number" name="currency-amount-2" value={""} />
+                <input 
+                type="number" 
+                name="currency-amount-2" 
+                value={result}
+                disabled={true} />
               </td>
               <td><select
                 name="currency-option-2"
@@ -72,7 +90,11 @@ const CurrencyConverter = () => {
         </table>
         <button id="convert-button" onClick={convert}>Convert</button>
       </div>
-      <ExchangeRate />
+      <ExchangeRate
+      exchangedData={exchangedData}
+      // chosenPrimaryCurrency={primaryCurrencyExchanged}
+      // chosenSecondayCurrency={secondaryCurrencyExchanged}
+       />
     </div>
   );
 }

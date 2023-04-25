@@ -4,8 +4,12 @@ import CurrencyConverter from "./components/CurrencyConverter";
 const App = () => {
   return (
     <div className="app">
-      <CurrencyConverter />
+      <h1 className="dashboard">Crypto Dashboard</h1>
+      <div className="app-wrapper">   
+         <CurrencyConverter />
       <NewsFeed />
+      </div>
+  
     </div>
   );
 }
