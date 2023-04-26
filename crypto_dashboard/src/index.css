@@ -49,7 +49,17 @@ button {
   border: none;
   float: right;
   margin: 2px;
+  font-size: 18px;
+  border-radius: 3px;
+  border: 1px solid black;
 
+}
+button:hover {
+  background-color: coral;
+}
+
+button:active {
+  background-color: gray;
 }
 
 .input-box {

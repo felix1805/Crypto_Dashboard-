@@ -22,7 +22,7 @@ const NewsFeed = () => {
     })
   }, [])
 
-  const firstArticles = articles?.slice(0, 7);
+  const firstArticles = articles?.slice(0, 9);
 
   return (
     <div className="news-feed">
